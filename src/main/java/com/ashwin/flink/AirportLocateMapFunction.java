@@ -1,6 +1,6 @@
 package com.ashwin.flink;
 
-import com.ashwin.AirportLocator;
+import com.ashwin.resource.AirportLocator;
 import com.ashwin.config.RedisConfig;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -25,6 +25,6 @@ public class AirportLocateMapFunction extends RichMapFunction<Tuple3<String, Dou
     }
 
     public Tuple2<String, String> map(Tuple3<String, Double, Double> user) throws Exception {
-        return new Tuple2<String, String>(user.f0, airportLocator.locate(user.f1, user.f2));
+        return new Tuple2<>(user.f0, airportLocator.locate(user.f1, user.f2));
     }
 }

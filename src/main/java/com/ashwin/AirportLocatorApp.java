@@ -8,14 +8,15 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.core.fs.FileSystem;
 
 import java.io.File;
 import java.io.IOException;
 
-public class App {
+public class AirportLocatorApp {
     private AppConfig appConfig;
 
-    public App(String configurationFile) throws IOException {
+    public AirportLocatorApp(String configurationFile) throws IOException {
         loadConfiguration(configurationFile);
     }
 
@@ -25,20 +26,24 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
+        if(args.length == 0){
+            System.out.println("Required: config.yml");
+            System.exit(0);
+        }
         String configurationFile = args[0];
-        App app = new App(configurationFile);
+        AirportLocatorApp app = new AirportLocatorApp(configurationFile);
 
         AppConfig appConfig = app.appConfig;
         new AirportDataLoader(appConfig).load();
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<String, Double, Double>> types = env.readCsvFile(appConfig.usersDataFilePath)
+        DataSet<Tuple3<String, Double, Double>> inputData = env.readCsvFile(appConfig.usersDataFilePath)
                 .ignoreFirstLine().types(String.class, Double.class, Double.class);
 
-        DataSet<Tuple2<String, String>> set = types.map(new AirportLocateMapFunction(appConfig.redisConfig));
+        DataSet<Tuple2<String, String>> set = inputData.map(new AirportLocateMapFunction(appConfig.redisConfig));
 
         // Can increase parallelism for distributed writing.
-        set.writeAsCsv("file://" + appConfig.outputFilePath).setParallelism(1);
+        set.writeAsCsv("file://" + appConfig.outputFilePath, FileSystem.WriteMode.OVERWRITE).setParallelism(1);
         env.execute();
     }
 }

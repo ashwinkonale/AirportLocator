@@ -1,4 +1,4 @@
-package com.ashwin;
+package com.ashwin.resource;
 
 import com.ashwin.config.RedisConfig;
 import com.ashwin.redis.RedisFactory;
@@ -21,7 +21,7 @@ public class AirportLocator implements Serializable{
 
     public String locate(Double lat, Double lon) {
         int tries = 5;
-        int multiplicationFactor = 3;
+        int multiplicationFactor = 2;
         int radiusInKm = 20;
         int try_count = 1;
         Jedis jedis = null;
@@ -41,9 +41,9 @@ public class AirportLocator implements Serializable{
     }
 
     private String locate(Double lat, Double lon, int radius, Jedis jedis) {
-        final List<GeoRadiusResponse> georadius = jedis.georadius(AirportDataLoader.AIRPORTS, lon, lat, radius, GeoUnit.KM, GeoRadiusParam.geoRadiusParam().sortAscending());
-        if (georadius.iterator().hasNext())
-            return georadius.iterator().next().getMemberByString();
+        final List<GeoRadiusResponse> geoRadius = jedis.georadius(AirportDataLoader.AIRPORTS, lon, lat, radius, GeoUnit.KM, GeoRadiusParam.geoRadiusParam().sortAscending());
+        if (geoRadius.iterator().hasNext())
+            return geoRadius.iterator().next().getMemberByString();
         return null;
     }
 
