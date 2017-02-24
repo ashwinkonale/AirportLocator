@@ -1,0 +1,7 @@
+airports.data.path: "/home/ashwin/Documents/travelAud/optd-sample-20161201.csv"
+users.data.path: "/home/ashwin/Documents/travelAud/sample_data.csv"
+output.path: "/tmp/result.csv"
+redis:
+  host: "172.17.0.2"
+  port: 6379
+
