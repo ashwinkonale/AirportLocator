@@ -1,7 +1,7 @@
-airports.data.path: "/home/ashwin/Documents/travelAud/optd-sample-20161201.csv"
-users.data.path: "/home/ashwin/Documents/travelAud/sample_data.csv"
-output.path: "/tmp/result.csv"
+airports.data.path: "/Users/macbook/Documents/travelAud/optd-sample-20161201.csv"
+users.data.path: "/Users/macbook/Documents/travelAud/sample_data.csv"
+output.path: "/Users/macbook/Documents/travelAud/result.csv"
 redis:
-  host: "172.17.0.2"
+  host: "localhost"
   port: 6379
 

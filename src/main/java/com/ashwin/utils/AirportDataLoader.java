@@ -35,7 +35,9 @@ public class AirportDataLoader {
     }
 
     private boolean isDataAlreadyLoaded() {
-        System.out.println("Airport data has already been loaded");
-        return Boolean.parseBoolean(jedis.get(IS_AIRPORT_DATA_LOADED));
+        boolean isDataLoaded = Boolean.parseBoolean(jedis.get(IS_AIRPORT_DATA_LOADED));
+        if(isDataLoaded)
+            System.out.println("Airport data has already been loaded");
+        return isDataLoaded;
     }
 }
